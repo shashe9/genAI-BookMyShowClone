@@ -1,1 +1,13 @@
 project_id = "njhqxvyvnhngsumairnn"
+
+[functions.ai-recommendations]
+verify_jwt = true
+
+[functions.send-booking-email]
+verify_jwt = false
+
+[functions.mock-payment]
+verify_jwt = false
+
+[functions.update-movie-data]
+verify_jwt = false

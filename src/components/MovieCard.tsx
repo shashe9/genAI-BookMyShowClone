@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, Clock, Calendar } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface MovieCardProps {
   id: string;
@@ -15,6 +16,7 @@ interface MovieCardProps {
 }
 
 export const MovieCard = ({ 
+  id,
   title, 
   poster, 
   genres, 
@@ -23,6 +25,11 @@ export const MovieCard = ({
   releaseDate, 
   language 
 }: MovieCardProps) => {
+  const navigate = useNavigate();
+
+  const handleBookTickets = () => {
+    navigate(`/book-tickets/${id}`);
+  };
   return (
     <Card className="group bg-gradient-card border-border/50 overflow-hidden hover:shadow-cinema transition-all duration-500 hover:scale-105 hover:border-primary/50">
       <div className="relative aspect-[3/4] overflow-hidden">
@@ -73,6 +80,7 @@ export const MovieCard = ({
         <Button 
           className="w-full bg-gradient-accent hover:shadow-glow transition-all duration-300"
           size="sm"
+          onClick={handleBookTickets}
         >
           Book Now
         </Button>

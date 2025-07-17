@@ -1,73 +1,97 @@
-# Welcome to your Lovable project
+# 🎟️ genAI-BookMyShowClone
+# ---------------------------------------------------------------------------------------------------------------
 
-## Project info
+# Welcome to the **genAI BookMyShow Clone**, a full-featured movie booking web app built using [Lovable](https://lovable.dev), powered by GenAI, React, Tailwind CSS, and Supabase.
 
-**URL**: https://lovable.dev/projects/2c20754d-f9e5-41e3-9eb2-f4eaa645253c
+# ---------------------------------------------------------------------------------------------------------------
 
-## How can I edit this code?
+# 🚀 Visit & edit this project on Lovable:  
+# https://lovable.dev/projects/2c20754d-f9e5-41e3-9eb2-f4eaa645253c
 
-There are several ways of editing your application.
+# ---------------------------------------------------------------------------------------------------------------
 
-**Use Lovable**
+# 📸 Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2c20754d-f9e5-41e3-9eb2-f4eaa645253c) and start prompting.
+# ✅ Responsive landing page with featured movies and posters  
+# ✅ User authentication (sign up & login with email/password)  
+# ✅ Real-time movie listings and user data using Supabase  
+# ✅ Personalized recommendations (AI-powered)  
+# ✅ Book tickets with available showtimes and theater listings  
+# ✅ Seat selection with live availability (green = available, gray = booked)  
+# ✅ Payment page with UPI / Card options (mock)  
+# ✅ Booking confirmation screen with summary  
+# ✅ Horizontal date scrolling to view future showtimes  
+# ✅ Easily editable via Lovable or your IDE
 
-Changes made via Lovable will be committed automatically to this repo.
+# ---------------------------------------------------------------------------------------------------------------
 
-**Use your preferred IDE**
+# 🛠️ Tech Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+#  React         :     Frontend logic & component UI  
+#  Vite          :     Fast dev environment          
+#  Tailwind CSS  :     Utility-first styling          
+#  shadcn/ui     :     Beautiful, accessible UI kit    
+#  TypeScript    :     Type safety & DX                
+#  Supabase      :     Auth, DB, and real-time backend 
+#  Lovable       :     GenAI-powered app builder  
 
-Follow these steps:
+# ---------------------------------------------------------------------------------------------------------------
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# ✏️ Editing the Project
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 🔹 Use Lovable (Recommended)
+# Open the project on Lovable:  
+# https://lovable.dev/projects/2c20754d-f9e5-41e3-9eb2-f4eaa645253c  
+# Prompt your edits — everything updates live and commits back to GitHub!
 
-# Step 3: Install the necessary dependencies.
-npm i
+# ---------------------------------------------------------------------------------------------------------------
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+# 🔹 Use Your Local IDE
 
-**Edit a file directly in GitHub**
+# Step 1: Clone this repo:
+# git clone https://github.com/<your-username>/genAI-BookMyShowClone.git  
+# cd genAI-BookMyShowClone
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+# Step 2: Install dependencies:
+# npm install
 
-**Use GitHub Codespaces**
+# Step 3: Run dev server:
+# npm run dev
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Make sure you have Node.js and npm installed.  
+# Install with nvm (recommended): https://github.com/nvm-sh/nvm#installing-and-updating
 
-## What technologies are used for this project?
+# ---------------------------------------------------------------------------------------------------------------
 
-This project is built with:
+# 🚀 Deploying the App
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+# Go to Lovable:  
+# https://lovable.dev/projects/2c20754d-f9e5-41e3-9eb2-f4eaa645253c  
+# Click on Share → Publish  
+# You’ll get a public URL to share your live app!
 
-## How can I deploy this project?
+# ---------------------------------------------------------------------------------------------------------------
 
-Simply open [Lovable](https://lovable.dev/projects/2c20754d-f9e5-41e3-9eb2-f4eaa645253c) and click on Share -> Publish.
+# 🌐 Custom Domain Setup
 
-## Can I connect a custom domain to my Lovable project?
+# You can connect a custom domain to your Lovable project:  
+# 1. Go to Project → Settings → Domains  
+# 2. Click Connect Domain  
+# 3. Follow the guide: https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide
 
-Yes, you can!
+# ---------------------------------------------------------------------------------------------------------------
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+# 📄 License
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+# This project is for educational and personal showcase purposes.  
+# Please do not use commercially unless you replace branding and adhere to IP laws.
+
+# ---------------------------------------------------------------------------------------------------------------
+
+# 🙌 Credits
+
+# Built with ❤️ using Lovable  
+# Supabase for backend magic  
+# Inspired by BookMyShow UI/UX
+# -By Shashank Shekhar

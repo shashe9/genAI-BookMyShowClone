@@ -35,6 +35,7 @@ const BookTickets = () => {
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedShowtime, setSelectedShowtime] = useState<Showtime | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>('');
   const [ticketCount, setTicketCount] = useState(1);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [bookedSeats, setBookedSeats] = useState<string[]>([]);
@@ -44,8 +45,16 @@ const BookTickets = () => {
   useEffect(() => {
     if (!movieId) return;
     
-    fetchShowtimes();
+    // Set default date to today
+    const today = new Date().toISOString().split('T')[0];
+    setSelectedDate(today);
   }, [movieId]);
+
+  useEffect(() => {
+    if (selectedDate) {
+      fetchShowtimes();
+    }
+  }, [selectedDate, movieId]);
 
   useEffect(() => {
     if (selectedShowtime) {
@@ -54,24 +63,39 @@ const BookTickets = () => {
   }, [selectedShowtime]);
 
   const fetchShowtimes = async () => {
+    if (!selectedDate) return;
+    
     try {
-      const { data, error } = await supabase
-        .from('showtimes')
-        .select(`
-          *,
-          theater:theaters(*)
-        `)
-        .eq('movie_id', movieId)
-        .gte('show_date', new Date().toISOString().split('T')[0])
-        .order('show_date')
-        .order('show_time');
+      setLoading(true);
+      // For demonstration, create sample showtimes for all theaters
+      const { data: theaters, error: theatersError } = await supabase
+        .from('theaters')
+        .select('*');
 
-      if (error) {
-        console.error('Error fetching showtimes:', error);
+      if (theatersError) {
+        console.error('Error fetching theaters:', theatersError);
         return;
       }
 
-      setShowtimes(data || []);
+      // Generate sample showtimes for demonstration
+      const sampleShowtimes: Showtime[] = [];
+      const times = ['10:00', '13:30', '16:45', '20:00', '22:30'];
+      
+      theaters?.forEach((theater) => {
+        times.forEach((time, index) => {
+          sampleShowtimes.push({
+            id: `${theater.id}-${time}-${selectedDate}`,
+            theater_id: theater.id,
+            show_date: selectedDate,
+            show_time: time,
+            available_seats: Math.floor(Math.random() * 50) + 20, // Random available seats 20-70
+            ticket_price: 250 + (index * 50), // Varying prices
+            theater: theater
+          });
+        });
+      });
+
+      setShowtimes(sampleShowtimes);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -130,6 +154,23 @@ const BookTickets = () => {
     });
   };
 
+  const generateDates = () => {
+    const dates = [];
+    const today = new Date();
+    
+    for (let i = 0; i < 14; i++) { // Show next 14 days
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      dates.push({
+        full: date.toISOString().split('T')[0],
+        day: date.toLocaleDateString('en-US', { weekday: 'short' }),
+        date: date.getDate(),
+        month: date.toLocaleDateString('en-US', { month: 'short' })
+      });
+    }
+    return dates;
+  };
+
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {
       weekday: 'short',
@@ -138,11 +179,16 @@ const BookTickets = () => {
     });
   };
 
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date);
+    setSelectedShowtime(null);
+    setSelectedSeats([]);
+  };
+
   const handleShowtimeSelect = (showtime: Showtime) => {
     setSelectedShowtime(showtime);
     setSelectedSeats([]);
   };
-
   const handleSeatSelect = (seatId: string) => {
     if (bookedSeats.includes(seatId)) return;
 
@@ -284,50 +330,91 @@ const BookTickets = () => {
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold mb-6">Theaters Showing {movie.title}</h2>
+        <h2 className="text-2xl font-bold mb-6">Book Tickets for {movie.title}</h2>
 
         {!selectedShowtime && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Select Number of Tickets</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-medium">Tickets:</span>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setTicketCount(Math.max(1, ticketCount - 1))}
-                    disabled={ticketCount <= 1}
-                  >
-                    <Minus className="w-4 h-4" />
-                  </Button>
-                  <span className="w-8 text-center font-medium">{ticketCount}</span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setTicketCount(Math.min(6, ticketCount + 1))}
-                    disabled={ticketCount >= 6}
-                  >
-                    <Plus className="w-4 h-4" />
-                  </Button>
+          <>
+            {/* Ticket Count Selection */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Select Number of Tickets</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-medium">Tickets:</span>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setTicketCount(Math.max(1, ticketCount - 1))}
+                      disabled={ticketCount <= 1}
+                    >
+                      <Minus className="w-4 h-4" />
+                    </Button>
+                    <span className="w-8 text-center font-medium">{ticketCount}</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setTicketCount(Math.min(6, ticketCount + 1))}
+                      disabled={ticketCount >= 6}
+                    >
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    (Maximum 6 tickets per booking)
+                  </span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  (Maximum 6 tickets per booking)
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </>
         )}
+
+        {/* Date Selection Row */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Select Date</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+              {generateDates().map((dateObj) => {
+                const isSelected = selectedDate === dateObj.full;
+                const isToday = dateObj.full === new Date().toISOString().split('T')[0];
+                
+                return (
+                  <Button
+                    key={dateObj.full}
+                    variant={isSelected ? "default" : "outline"}
+                    className={`
+                      flex-shrink-0 flex flex-col h-auto py-3 px-4 min-w-[80px]
+                      ${isSelected ? 'bg-primary text-primary-foreground' : ''}
+                      ${isToday && !isSelected ? 'border-primary text-primary' : ''}
+                    `}
+                    onClick={() => handleDateSelect(dateObj.full)}
+                  >
+                    <span className="text-xs font-normal">
+                      {isToday ? 'Today' : dateObj.day}
+                    </span>
+                    <span className="text-lg font-bold">{dateObj.date}</span>
+                    <span className="text-xs font-normal">{dateObj.month}</span>
+                  </Button>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
 
         {loading ? (
           <div className="text-center py-8">
             <p className="text-muted-foreground">Loading theaters and showtimes...</p>
           </div>
-        ) : Object.keys(groupedShowtimes).length === 0 ? (
+        ) : !selectedDate ? (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">No showtimes available for this movie.</p>
+            <p className="text-muted-foreground">Please select a date to view showtimes.</p>
+          </div>
+        ) : showtimes.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">No showtimes available for {formatDate(selectedDate)}.</p>
           </div>
         ) : selectedShowtime ? (
           <div className="space-y-6">
@@ -371,6 +458,7 @@ const BookTickets = () => {
           </div>
         ) : (
           <div className="space-y-6">
+            <h3 className="text-xl font-semibold">Available Theaters & Showtimes</h3>
             {Object.values(groupedShowtimes).map(({ theater, showtimes }) => (
               <Card key={theater.id}>
                 <CardHeader>
@@ -388,22 +476,15 @@ const BookTickets = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {/* Group by date */}
-                    {Object.entries(
-                      showtimes.reduce((acc, showtime) => {
-                        const date = showtime.show_date;
-                        if (!acc[date]) acc[date] = [];
-                        acc[date].push(showtime);
-                        return acc;
-                      }, {} as Record<string, Showtime[]>)
-                    ).map(([date, dateShowtimes]) => (
-                      <div key={date}>
-                        <h4 className="font-medium mb-3 flex items-center gap-2">
-                          <Clock className="w-4 h-4" />
-                          {formatDate(date)}
-                        </h4>
-                        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-                          {dateShowtimes.map((showtime) => (
+                    <div>
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        Showtimes for {formatDate(selectedDate)}
+                      </h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                        {showtimes
+                          .filter(showtime => showtime.theater_id === theater.id)
+                          .map((showtime) => (
                             <Button
                               key={showtime.id}
                               variant="outline"
@@ -422,9 +503,8 @@ const BookTickets = () => {
                               </span>
                             </Button>
                           ))}
-                        </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
